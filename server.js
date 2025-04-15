@@ -1,21 +1,19 @@
 const express = require('express');
-const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
 
-// 環境變數 TARGET_URL 決定代理目標
-const target = process.env.TARGET_URL || 'https://gc.cniot.vip/#/iot-atsave-';
+// 環境變數設定
+const targetBase = process.env.TARGET_URL || 'https://gc.cniot.vip';
 
-app.use('/', createProxyMiddleware({
-  target,
-  changeOrigin: true,
-  ws: true,
-  onProxyReq(proxyReq, req, res) {
-    proxyReq.setHeader('Host', 'gc.cniot.vip');
-  },
-}));
+app.get('*', (req, res) => {
+  const path = req.path.split('/')[1] || 'DongYi';  // 預設 DongYi
+  const targetURL = `${targetBase}/#/iot-atsave-${path}`;
+  
+  console.log(`Redirect to: ${targetURL}`);
+  res.redirect(302, targetURL);
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Proxy running at http://localhost:${PORT} -> ${target}`);
+  console.log(`Proxy Redirect running on port ${PORT}`);
 });
