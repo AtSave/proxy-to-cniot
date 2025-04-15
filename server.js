@@ -1,18 +1,22 @@
 const express = require('express');
-
 const app = express();
 
-const targetBase = process.env.TARGET_URL || 'https://gc.cniot.vip';
-
-app.get('*', (req, res) => {
-  const path = req.path.split('/')[1] || '';  // 不給預設
-  const targetURL = `${targetBase}/#/iot-atsave-${path}`;
+app.use((req, res) => {
+  // 取得路徑，例如 /DongYi、/Ben
+  const pathParts = req.path.split('/');
   
-  console.log(`Redirect to: ${targetURL}`);
-  res.redirect(302, targetURL);
+  // ✅ 若沒有路徑，則空字串（不預設 DongYi）
+  const companyTag = pathParts[1] || '';
+
+  // ✅ 轉址目標網址
+  const target = `https://gc.cniot.vip/#/iot-atsave-${companyTag}`;
+
+  // ✅ 執行轉址
+  res.redirect(302, target);
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Proxy Redirect running on port ${PORT}`);
+// 指定 Railway 使用的 PORT
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Proxy server listening on port ${port}`);
 });
