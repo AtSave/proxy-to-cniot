@@ -4,7 +4,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const app = express();
 
 // 環境變數 TARGET_URL 決定代理目標
-const target = process.env.TARGET_URL || 'https://gc.cniot.vip';
+const target = process.env.TARGET_URL || 'https://gc.cniot.vip/#/iot-atsave-';
 
 app.use('/', createProxyMiddleware({
   target,
