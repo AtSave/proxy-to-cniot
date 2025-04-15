@@ -2,11 +2,10 @@ const express = require('express');
 
 const app = express();
 
-// 環境變數設定
 const targetBase = process.env.TARGET_URL || 'https://gc.cniot.vip';
 
 app.get('*', (req, res) => {
-  const path = req.path.split('/')[1] || 'DongYi';  // 預設 DongYi
+  const path = req.path.split('/')[1] || 'DongYi';  // 預設DongYi
   const targetURL = `${targetBase}/#/iot-atsave-${path}`;
   
   console.log(`Redirect to: ${targetURL}`);
